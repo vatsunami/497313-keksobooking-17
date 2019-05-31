@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Alex Var](https://up.htmlacademy.ru/javascript/17/user/497313).
-* Наставник: `Неизвестно`.
+* Наставник: [Alexander Vagner](https://htmlacademy.ru/profile/id354297).
 
 ---
 
