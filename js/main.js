@@ -24,7 +24,7 @@ var generateAds = function (number) {
         type: randomInteger(0, OFFER_TYPES.length - 1)},
       location: {
         x: randomInteger(PIN_WIDTH, mapWidth - PIN_WIDTH),
-        y: randomInteger(PIN_MIN_Y - PIN_HEIGHT, PIN_MAX_Y - PIN_HEIGHT)
+        y: randomInteger(PIN_MIN_Y + PIN_HEIGHT, PIN_MAX_Y - PIN_HEIGHT)
       }
     };
   }
