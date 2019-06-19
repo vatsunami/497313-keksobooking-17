@@ -31,9 +31,6 @@ var generateAds = function (number) {
   return ads;
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 var pinsContainer = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -53,4 +50,44 @@ var generateFragment = function (advertisements) {
   return fragment;
 };
 
-pinsContainer.appendChild(generateFragment(generateAds(NUMBER_OF_ADS)));
+var map = document.querySelector('.map');
+var pinMain = pinsContainer.querySelector('.map__pin--main');
+var formMapFilter = map.querySelector('.map__filters');
+var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
+var formAd = document.querySelector('.ad-form');
+var formAdGroups = formAd.querySelectorAll('fieldset');
+var formAdInputAddress = formAd.querySelector('#address');
+
+pinMain.addEventListener('click', function () {
+  pinsContainer.appendChild(generateFragment(generateAds(NUMBER_OF_ADS)));
+  map.classList.remove('map--faded');
+  formAd.classList.remove('ad-form--disabled');
+  switchDisabledAttr(formAdGroups, false);
+  switchDisabledAttr(formMapFilterGroups, false);
+});
+
+pinMain.addEventListener('mouseup', function () {
+  writePinMainCoordinates();
+});
+
+var switchDisabledAttr = function (formElements, isDisabled) {
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].disabled = isDisabled;
+  }
+};
+
+switchDisabledAttr(formAdGroups, true);
+switchDisabledAttr(formMapFilterGroups, true);
+
+var getPinMainCoordinates = function () {
+  var pinMainX = pinMain.offsetLeft;
+  var pinMainY = pinMain.offsetTop;
+  var pinMainCoordinates = pinMainX + ', ' + pinMainY;
+  return pinMainCoordinates;
+};
+
+var writePinMainCoordinates = function () {
+  formAdInputAddress.value = getPinMainCoordinates();
+};
+
+writePinMainCoordinates();
