@@ -5,7 +5,14 @@ var PIN_HEIGHT = 70;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
 var NUMBER_OF_ADS = 8;
-var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+// var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+// var OFFER_PRICES = [10000, 1000, 5000, 0];
+var OFFERS = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+}
 
 var mapWidth = document.querySelector('.map').offsetWidth;
 var pinsContainer = document.querySelector('.map__pins');
@@ -16,7 +23,12 @@ var formMapFilter = map.querySelector('.map__filters');
 var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
 var formAd = document.querySelector('.ad-form');
 var formAdGroups = formAd.querySelectorAll('fieldset');
-var formAdInputAddress = formAd.querySelector('#address');
+var formAdAddress = formAd.querySelector('#address');
+var formAdTitle = formAd.querySelector('#title');
+var formAdType = formAd.querySelector('#type');
+var formAdPrice = formAd.querySelector('#price');
+var formAdTimeIn = formAd.querySelector('#timein');
+var formAdTimeOut = formAd.querySelector('#timeout');
 
 var randomInteger = function (min, max) {
   var random = min + Math.random() * (max + 1 - min);
@@ -31,7 +43,7 @@ var generateAds = function (number) {
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'},
       offer: {
-        type: randomInteger(0, OFFER_TYPES.length - 1)},
+        type: randomInteger(0, OFFERS.length - 1)},
       location: {
         x: randomInteger(PIN_WIDTH, mapWidth - PIN_WIDTH),
         y: randomInteger(PIN_MIN_Y + PIN_HEIGHT, PIN_MAX_Y - PIN_HEIGHT)
@@ -40,6 +52,8 @@ var generateAds = function (number) {
   }
   return ads;
 };
+
+var ads = generateAds(NUMBER_OF_ADS);
 
 var renderPin = function (advertisement) {
   var pin = pinTemplate.cloneNode(true);
@@ -56,10 +70,6 @@ var generateFragment = function (advertisements) {
   }
   return fragment;
 };
-
-// pinsContainer.appendChild(generateFragment(generateAds(NUMBER_OF_ADS)));
-
-var ads = generateAds(NUMBER_OF_ADS);
 
 pinMain.addEventListener('click', function () {
   pinsContainer.appendChild(generateFragment(ads));
@@ -87,10 +97,43 @@ var getPinMainCoordinates = function () {
 };
 
 var writePinMainCoordinates = function () {
-  formAdInputAddress.value = getPinMainCoordinates();
+  formAdAddress.value = getPinMainCoordinates();
 };
 
 writePinMainCoordinates();
 
 switchDisabledAttr(formAdGroups, true);
 switchDisabledAttr(formMapFilterGroups, true);
+
+// var createOffers = function() {
+//   var offerTypesCopy = OFFER_TYPES.slice();
+//   var offerPricesCopy = OFFER_PRICES.slice();
+//   var offers = {};
+//
+//   for (var i = 0; i < OFFER_TYPES.length; i++) {
+//     offers[offerTypesCopy[i]] = offerPricesCopy[i];
+//   }
+//   return offers;
+// }
+//
+// var offers = createOffers();
+
+var onChangeFormAdType = function (evt) {
+  var target = evt.target;
+  var price = OFFERS[target.value];
+  formAdPrice.placeholder = price;
+  formAdPrice.min = price;
+};
+
+var onChangeFormAdTime = function (evt) {
+  var target = evt.target;
+  if (target === formAdTimeIn) {
+    formAdTimeOut.value = target.value;
+  } else {
+    formAdTimeIn.value = target.value;
+  }
+};
+
+formAdType.addEventListener('change', onChangeFormAdType);
+formAdTimeIn.addEventListener('change', onChangeFormAdTime);
+formAdTimeOut.addEventListener('change', onChangeFormAdTime);
