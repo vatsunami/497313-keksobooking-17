@@ -12,7 +12,7 @@ var OFFERS = {
   flat: 1000,
   house: 5000,
   palace: 10000
-}
+};
 
 var mapWidth = document.querySelector('.map').offsetWidth;
 var pinsContainer = document.querySelector('.map__pins');
@@ -24,7 +24,6 @@ var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
 var formAd = document.querySelector('.ad-form');
 var formAdGroups = formAd.querySelectorAll('fieldset');
 var formAdAddress = formAd.querySelector('#address');
-var formAdTitle = formAd.querySelector('#title');
 var formAdType = formAd.querySelector('#type');
 var formAdPrice = formAd.querySelector('#price');
 var formAdTimeIn = formAd.querySelector('#timein');
