@@ -2,11 +2,11 @@
 
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var PIN_MAIN_HEIGHT = 80;
+var PIN_MAIN_WIDTH = 65;
 var PIN_MIN_Y = 130;
 var PIN_MAX_Y = 630;
 var NUMBER_OF_ADS = 8;
-// var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
-// var OFFER_PRICES = [10000, 1000, 5000, 0];
 var OFFERS = {
   bungalo: 0,
   flat: 1000,
@@ -28,6 +28,10 @@ var formAdType = formAd.querySelector('#type');
 var formAdPrice = formAd.querySelector('#price');
 var formAdTimeIn = formAd.querySelector('#timein');
 var formAdTimeOut = formAd.querySelector('#timeout');
+
+var pinMainMinX = pinsContainer.offsetLeft;
+var pinMainMaxX = pinsContainer.offsetWidth - PIN_MAIN_WIDTH;
+var pinMainMaxY = pinsContainer.offsetHeight - PIN_MAIN_HEIGHT;
 
 var randomInteger = function (min, max) {
   var random = min + Math.random() * (max + 1 - min);
@@ -70,17 +74,13 @@ var generateFragment = function (advertisements) {
   return fragment;
 };
 
-pinMain.addEventListener('click', function () {
+var activatePage = function () {
   pinsContainer.appendChild(generateFragment(ads));
   map.classList.remove('map--faded');
   formAd.classList.remove('ad-form--disabled');
   switchDisabledAttr(formAdGroups, false);
   switchDisabledAttr(formMapFilterGroups, false);
-});
-
-pinMain.addEventListener('mouseup', function () {
-  writePinMainCoordinates();
-});
+};
 
 var switchDisabledAttr = function (formElements, isDisabled) {
   for (var i = 0; i < formElements.length; i++) {
@@ -89,8 +89,8 @@ var switchDisabledAttr = function (formElements, isDisabled) {
 };
 
 var getPinMainCoordinates = function () {
-  var pinMainX = pinMain.offsetLeft - PIN_WIDTH / 2;
-  var pinMainY = pinMain.offsetTop + PIN_HEIGHT;
+  var pinMainX = Math.round(pinMain.offsetLeft + PIN_MAIN_WIDTH / 2);
+  var pinMainY = Math.round(pinMain.offsetTop + PIN_MAIN_HEIGHT);
   var pinMainCoordinates = pinMainX + ', ' + pinMainY;
   return pinMainCoordinates;
 };
@@ -103,19 +103,6 @@ writePinMainCoordinates();
 
 switchDisabledAttr(formAdGroups, true);
 switchDisabledAttr(formMapFilterGroups, true);
-
-// var createOffers = function() {
-//   var offerTypesCopy = OFFER_TYPES.slice();
-//   var offerPricesCopy = OFFER_PRICES.slice();
-//   var offers = {};
-//
-//   for (var i = 0; i < OFFER_TYPES.length; i++) {
-//     offers[offerTypesCopy[i]] = offerPricesCopy[i];
-//   }
-//   return offers;
-// }
-//
-// var offers = createOffers();
 
 var onChangeFormAdType = function (evt) {
   var target = evt.target;
@@ -136,3 +123,56 @@ var onChangeFormAdTime = function (evt) {
 formAdType.addEventListener('change', onChangeFormAdType);
 formAdTimeIn.addEventListener('change', onChangeFormAdTime);
 formAdTimeOut.addEventListener('change', onChangeFormAdTime);
+
+// --------------------------------------
+
+pinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onPinMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
+    pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
+
+    if (moveEvt.pageX < map.offsetLeft) {
+      pinMain.style.left = pinMainMinX + 'px';
+    }
+    if (moveEvt.pageX > map.offsetLeft + pinsContainer.offsetWidth - PIN_MAIN_WIDTH) {
+      pinMain.style.left = pinMainMaxX + 'px';
+    }
+    if (moveEvt.pageY < PIN_MIN_Y) {
+      pinMain.style.top = PIN_MIN_Y + 'px';
+    }
+    if (moveEvt.pageY > pinMainMaxY) {
+      pinMain.style.top = pinMainMaxY + 'px';
+    }
+  };
+
+  var onPinMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    activatePage();
+    writePinMainCoordinates();
+
+    document.removeEventListener('mousemove', onPinMouseMove);
+    document.removeEventListener('mouseup', onPinMouseUp);
+  };
+
+  document.addEventListener('mousemove', onPinMouseMove);
+  document.addEventListener('mouseup', onPinMouseUp);
+});
