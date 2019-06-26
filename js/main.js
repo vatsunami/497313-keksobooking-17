@@ -150,7 +150,7 @@ pinMain.addEventListener('mousedown', function (evt) {
     pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
     pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
 
-    if (moveEvt.pageX < map.offsetLeft) {
+    if (moveEvt.pageX < map.offsetLeft + PIN_MAIN_WIDTH) {
       pinMain.style.left = pinMainMinX + 'px';
     }
     if (moveEvt.pageX > map.offsetLeft + pinsContainer.offsetWidth - PIN_MAIN_WIDTH) {
