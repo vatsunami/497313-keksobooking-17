@@ -4,16 +4,29 @@
 
   var PIN_MAIN_HEIGHT = 80;
   var PIN_MAIN_WIDTH = 65;
-  var NUMBER_OF_ADS = 8;
+  var PIN_MIN_X = 0;
+  var PIN_MAX_X = 1135;
+  var PIN_MIN_Y = 130;
+  var PIN_MAX_Y = 624;
 
   var pinsContainer = document.querySelector('.map__pins');
   var pinMain = pinsContainer.querySelector('.map__pin--main');
   var map = document.querySelector('.map');
   var formAd = document.querySelector('.ad-form');
-  var ads = window.map.generateAds(NUMBER_OF_ADS);
+
+  var onSuccess = function (ads) {
+    pinsContainer.appendChild(window.map.generateFragment(ads));
+  };
+
+  var onError = function () {
+    var mainBlock = document.querySelector('main');
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var error = errorTemplate.cloneNode(true);
+    mainBlock.appendChild(error);
+  };
 
   var activatePage = function () {
-    pinsContainer.appendChild(window.map.generateFragment(ads));
+    window.backend.load(onSuccess, onError);
     map.classList.remove('map--faded');
     formAd.classList.remove('ad-form--disabled');
     window.form.switchDisabledAttrAll(false);
@@ -50,21 +63,17 @@
       pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
       pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
 
-      var pinMainMinX = pinsContainer.offsetLeft;
-      var pinMainMaxX = pinsContainer.offsetWidth - PIN_MAIN_WIDTH;
-      var pinMainMaxY = pinsContainer.offsetHeight - PIN_MAIN_HEIGHT;
-
       if (moveEvt.pageX < map.offsetLeft + PIN_MAIN_WIDTH) {
-        pinMain.style.left = pinMainMinX + 'px';
+        pinMain.style.left = PIN_MIN_X + 'px';
       }
-      if (moveEvt.pageX > map.offsetLeft + pinsContainer.offsetWidth - PIN_MAIN_WIDTH) {
-        pinMain.style.left = pinMainMaxX + 'px';
+      if (moveEvt.pageX > map.offsetLeft + PIN_MAX_X) {
+        pinMain.style.left = PIN_MAX_X + 'px';
       }
-      if (moveEvt.pageY < window.data.PIN_MIN_Y) {
-        pinMain.style.top = window.data.PIN_MIN_Y + 'px';
+      if (moveEvt.pageY < PIN_MIN_Y) {
+        pinMain.style.top = PIN_MIN_Y + 'px';
       }
-      if (moveEvt.pageY > pinMainMaxY) {
-        pinMain.style.top = pinMainMaxY + 'px';
+      if (moveEvt.pageY > PIN_MAX_Y) {
+        pinMain.style.top = PIN_MAX_Y + 'px';
       }
     };
 
