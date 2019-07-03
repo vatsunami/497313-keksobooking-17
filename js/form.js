@@ -2,6 +2,13 @@
 
 (function () {
 
+  var OFFERS = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
+
   var formMapFilter = document.querySelector('.map__filters');
   var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
   var formAd = document.querySelector('.ad-form');
@@ -33,7 +40,7 @@
 
   var onChangeFormAdType = function (evt) {
     var target = evt.target;
-    var price = window.data.OFFERS[target.value];
+    var price = OFFERS[target.value];
     formAdPrice.placeholder = price;
     formAdPrice.min = price;
   };
