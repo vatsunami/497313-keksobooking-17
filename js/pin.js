@@ -14,19 +14,11 @@
   var map = document.querySelector('.map');
   var formAd = document.querySelector('.ad-form');
 
-  var onSuccess = function (ads) {
-    pinsContainer.appendChild(window.map.generateFragment(ads));
-  };
-
-  var onError = function () {
-    var mainBlock = document.querySelector('main');
-    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var error = errorTemplate.cloneNode(true);
-    mainBlock.appendChild(error);
-  };
+  var isPageActive = false;
 
   var activatePage = function () {
-    window.backend.load(onSuccess, onError);
+    isPageActive = true;
+    window.map.getData();
     map.classList.remove('map--faded');
     formAd.classList.remove('ad-form--disabled');
     window.form.switchDisabledAttrAll(false);
@@ -79,7 +71,9 @@
 
     var onPinMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      activatePage();
+      if (!isPageActive) {
+        activatePage();
+      }
       window.form.writePinMainCoordinates();
 
       document.removeEventListener('mousemove', onPinMouseMove);
