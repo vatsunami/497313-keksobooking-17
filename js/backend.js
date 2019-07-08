@@ -4,7 +4,7 @@
 
   var URL_GET = 'https://js.dump.academy/keksobooking/data';
   var TIMEOUT = 10000;
-  var STATUS_OK = 200
+  var STATUS_OK = 200;
 
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
