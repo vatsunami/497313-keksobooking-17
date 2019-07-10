@@ -15,6 +15,7 @@
   var onSuccess = function (data) {
     receivedData = data;
     renderPins(receivedData);
+    window.card.renderCard(receivedData);
   };
 
   var onError = function () {
