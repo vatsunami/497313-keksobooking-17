@@ -14,18 +14,19 @@
 
   var createCard = function (ad) {
     var card = cardTemplate.cloneNode(true);
+    var cardFeatures = card.querySelector('.popup__features');
+    var cardPhotos = card.querySelector('.popup__photos');
+    var cardButtonClose = card.querySelector('.popup__close');
 
     card.querySelector('.popup__avatar').src = ad.author.avatar;
     card.querySelector('.popup__title').textContent = ad.offer.title;
     card.querySelector('.popup__text--address').textContent = ad.offer.address;
     card.querySelector('.popup__text--price').textContent = ad.offer.price + '₽/ночь';
     card.querySelector('.popup__type').textContent = HousingType[ad.offer.type.toUpperCase()];
-    card.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты ' + ad.offer.guests + ' гостей';
+    card.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
     card.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     card.querySelector('.popup__description').textContent = ad.offer.description;
 
-    var cardFeatures = card.querySelector('.popup__features');
-    var cardPhotos = card.querySelector('.popup__photos');
     cardFeatures.innerHTML = '';
     cardPhotos.innerHTML = '';
 
@@ -44,16 +45,34 @@
       img.height = 40;
       cardPhotos.appendChild(img);
     });
+
+    cardButtonClose.addEventListener('click', function () {
+      closeCardPopup();
+    });
+
     return card;
   };
 
-  var renderCard = function (advertisements) {
+  var renderCard = function (advertisement) {
+    if (cardsContainer.querySelector('.map__card')) {
+      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
+    }
     var fragment = document.createDocumentFragment();
-    advertisements.slice(0, 1).forEach(function (it) {
-      fragment.appendChild(createCard(it));
-    });
+    fragment.appendChild(createCard(advertisement));
     cardsContainer.appendChild(fragment);
   };
+
+  var closeCardPopup = function () {
+    if (cardsContainer.querySelector('.map__card')) {
+      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
+    }
+  };
+
+  document.addEventListener('keydown', function (evt) {
+    if (window.util.isEscPressed(evt)) {
+      closeCardPopup();
+    }
+  });
 
   window.card = {
     renderCard: renderCard

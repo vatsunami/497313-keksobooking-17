@@ -15,7 +15,6 @@
   var onSuccess = function (data) {
     receivedData = data;
     renderPins(receivedData);
-    window.card.renderCard(receivedData);
   };
 
   var onError = function () {
@@ -34,6 +33,9 @@
     pin.style = 'left: ' + (advertisement.location.x - PIN_WIDTH / 2) + 'px; top: ' + (advertisement.location.y - PIN_HEIGHT) + 'px;';
     pin.querySelector('img').src = advertisement.author.avatar;
     pin.querySelector('img').alt = 'Метка объявления';
+    pin.addEventListener('click', function () {
+      window.card.renderCard(advertisement);
+    });
     return pin;
   };
 
@@ -55,10 +57,10 @@
   };
 
   var updatePins = function () {
-    var filteredPins;
     if (filterHousingType.value === 'any') {
       renderPins(receivedData);
     } else {
+      var filteredPins;
       filteredPins = receivedData.filter(function (ad) {
         return filterHousingType.value === ad.offer.type;
       });

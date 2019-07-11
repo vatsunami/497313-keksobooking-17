@@ -87,4 +87,5 @@
   window.pin = {
     getPinMainCoordinates: getPinMainCoordinates
   };
+
 })();
