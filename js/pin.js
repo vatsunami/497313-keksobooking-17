@@ -6,7 +6,7 @@
   var PIN_MAIN_WIDTH = 65;
   var PIN_MIN_X = 0;
   var PIN_MAX_X = 1135;
-  var PIN_MIN_Y = 130;
+  var PIN_MIN_Y = 50;
   var PIN_MAX_Y = 624;
 
   var pinsContainer = document.querySelector('.map__pins');
@@ -61,7 +61,7 @@
       if (moveEvt.pageX > map.offsetLeft + PIN_MAX_X) {
         pinMain.style.left = PIN_MAX_X + 'px';
       }
-      if (moveEvt.pageY < PIN_MIN_Y) {
+      if (moveEvt.pageY < PIN_MIN_Y + PIN_MAIN_HEIGHT) {
         pinMain.style.top = PIN_MIN_Y + 'px';
       }
       if (moveEvt.pageY > PIN_MAX_Y) {
