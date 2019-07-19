@@ -1,34 +1,58 @@
 'use strict';
 
 (function () {
+  var mainBlock = document.querySelector('main');
 
-  var renderMessage = function (status) {
-    var mainBlock = document.querySelector('main');
+  var removeMessage = function () {
+    var lastChild = mainBlock.lastChild;
+    mainBlock.removeChild(lastChild);
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onEscPress);
+  };
 
-    if (status === 'success') {
-      var successTemplate = document.querySelector('#success').content.querySelector('.success');
-      var success = successTemplate.cloneNode(true);
-      mainBlock.appendChild(success);
-    }
+  var onDocumentClick = function () {
+    removeMessage();
+  };
 
-    if (status === 'error') {
-      var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-      var error = errorTemplate.cloneNode(true);
-      mainBlock.appendChild(error);
+  var onEscPress = function (evt) {
+    if (window.util.isEscPressed(evt)) {
+      removeMessage();
     }
   };
 
-  var onSuccess = function () {
+  var onErrorButtonClick = function () {
+    removeMessage();
+  };
+
+  var renderMessage = function (status) {
+    var template;
+    var message;
+    if (status === 'success') {
+      template = document.querySelector('#success').content.querySelector('.success');
+      message = template.cloneNode(true);
+    }
+    if (status === 'error') {
+      template = document.querySelector('#error').content.querySelector('.error');
+      message = template.cloneNode(true);
+      var errorButton = message.querySelector('.error__button');
+      errorButton.addEventListener('click', onErrorButtonClick);
+    }
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onEscPress);
+    mainBlock.appendChild(message);
+  };
+
+  var showSuccessMessage = function () {
     renderMessage('success');
   };
 
-  var onError = function () {
+  var showErrorMessage = function () {
     renderMessage('error');
   };
 
   window.message = {
-    onSuccess: onSuccess,
-    onError: onError
+    showSuccessMessage: showSuccessMessage,
+    showErrorMessage: showErrorMessage
   };
 
 })();

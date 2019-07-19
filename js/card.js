@@ -47,7 +47,7 @@
     });
 
     cardButtonClose.addEventListener('click', function () {
-      closeCardPopup();
+      removeCard();
     });
 
     return card;
@@ -62,20 +62,21 @@
     cardsContainer.appendChild(fragment);
   };
 
-  var closeCardPopup = function () {
+  var removeCard = function () {
     if (cardsContainer.querySelector('.map__card')) {
       cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
     }
   };
 
-  document.addEventListener('keydown', function (evt) {
-    if (window.util.isEscPressed(evt)) {
-      closeCardPopup();
-    }
-  });
+  // document.addEventListener('keydown', function (evt) {
+  //   if (window.util.isEscPressed(evt)) {
+  //     closeCardPopup();
+  //   }
+  // });
 
   window.card = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    removeCard: removeCard
   };
 
 })();

@@ -9,8 +9,6 @@
   var PIN_MIN_Y = 50;
   var PIN_MAX_Y = 624;
 
-  var isPageActive = false;
-
   var pinsContainer = document.querySelector('.map__pins');
   var pinMain = pinsContainer.querySelector('.map__pin--main');
   var map = document.querySelector('.map');
@@ -68,12 +66,7 @@
 
     var onPinMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
-      if (!isPageActive) {
-        isPageActive = true;
-        window.page.activatePage();
-      }
-
+      window.page.activatePage();
       writePinMainCoordinates();
 
       document.removeEventListener('mousemove', onPinMouseMove);

@@ -16,30 +16,36 @@
     price: 1000,
     time: '12:00',
     rooms: 1,
-    capacity: 1
+    capacity: 1,
+    description: ''
   };
 
   var formMapFilter = document.querySelector('.map__filters');
   var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
   var formAd = document.querySelector('.ad-form');
   var formAdGroups = formAd.querySelectorAll('fieldset');
-  // var formAdTitle = formAd.querySelector('#title');
+  var formAdTitle = formAd.querySelector('#title');
+  var formAdAddress = formAd.querySelector('#address');
   var formAdType = formAd.querySelector('#type');
   var formAdPrice = formAd.querySelector('#price');
   var formAdTimeIn = formAd.querySelector('#timein');
   var formAdTimeOut = formAd.querySelector('#timeout');
   var formAdRooms = formAd.querySelector('#room_number');
   var formAdCapacity = formAd.querySelector('#capacity');
+  var formAdDescription = formAd.querySelector('#description');
   // var formAdButtonSubmit = formAd.querySelector('.ad-form__submit');
   var formAdButtonReset = formAd.querySelector('.ad-form__reset');
 
   var resetFormData = function () {
-    formAdType.value = startFormValues.title;
-    formAdPrice.value = startFormValues.type;
+    formAdTitle.value = startFormValues.title;
+    formAdAddress.value = startFormValues.address;
+    formAdType.value = startFormValues.type;
+    formAdPrice.value = startFormValues.price;
     formAdTimeIn.value = startFormValues.time;
     formAdTimeOut.value = startFormValues.time;
     formAdRooms.value = startFormValues.rooms;
     formAdCapacity.value = startFormValues.capacity;
+    formAdDescription.value = startFormValues.description;
   };
 
   var switchDisabledAttr = function (formElements, isDisabled) {
@@ -79,9 +85,18 @@
     }
   };
 
+  var onSuccess = function () {
+    window.page.deactivatePage();
+    window.message.showSuccessMessage();
+  };
+
+  var onError = function () {
+    window.message.showErrorMessage();
+  };
+
   var onFormAdButtonSubmit = function (evtSubmit) {
     evtSubmit.preventDefault();
-    window.message.onSuccess();
+    window.backend.save(new FormData(formAd), onSuccess, onError);
   };
 
   var onFormAdButtonResetClick = function () {
