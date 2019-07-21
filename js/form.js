@@ -13,7 +13,7 @@
     title: '',
     address: '',
     type: 'flat',
-    price: 1000,
+    price: '',
     time: '12:00',
     rooms: 1,
     capacity: 1,

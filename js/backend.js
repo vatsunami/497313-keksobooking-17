@@ -11,9 +11,7 @@
 
   var createXhr = function (method, url, onLoad, onError, data) {
     var xhr = new XMLHttpRequest();
-
     xhr.responseType = 'json';
-
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_OK) {
         onLoad(xhr.response);
@@ -21,22 +19,17 @@
         onError();
       }
     });
-
     xhr.addEventListener('error', function () {
       onError();
     });
-
     xhr.addEventListener('timeout', function () {
       onError();
     });
-
     xhr.timeout = TIMEOUT;
     xhr.open(method, url);
-
     if (method === METHOD_GET) {
       xhr.send();
     }
-
     if (method === METHOD_POST && data) {
       xhr.send(data);
     }

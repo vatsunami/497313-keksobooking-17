@@ -46,17 +46,13 @@
       cardPhotos.appendChild(img);
     });
 
-    cardButtonClose.addEventListener('click', function () {
-      removeCard();
-    });
+    cardButtonClose.addEventListener('click', onCardButtonCloseClick);
+    document.addEventListener('keydown', onEscPress);
 
     return card;
   };
 
   var renderCard = function (advertisement) {
-    if (cardsContainer.querySelector('.map__card')) {
-      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
-    }
     var fragment = document.createDocumentFragment();
     fragment.appendChild(createCard(advertisement));
     cardsContainer.appendChild(fragment);
@@ -64,15 +60,21 @@
 
   var removeCard = function () {
     if (cardsContainer.querySelector('.map__card')) {
-      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
+      var card = cardsContainer.querySelector('.map__card');
+      cardsContainer.removeChild(card);
+      document.removeEventListener('keydown', onEscPress);
     }
   };
 
-  // document.addEventListener('keydown', function (evt) {
-  //   if (window.util.isEscPressed(evt)) {
-  //     closeCardPopup();
-  //   }
-  // });
+  var onEscPress = function (evt) {
+    if (window.util.isEscPressed(evt)) {
+      removeCard();
+    }
+  };
+
+  var onCardButtonCloseClick = function () {
+    removeCard();
+  };
 
   window.card = {
     renderCard: renderCard,

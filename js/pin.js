@@ -77,6 +77,4 @@
     document.addEventListener('mouseup', onPinMouseUp);
   });
 
-  writePinMainCoordinates();
-
 })();

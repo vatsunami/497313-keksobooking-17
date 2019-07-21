@@ -7,7 +7,7 @@
 
   var isPageActive = false;
 
-  var checkPageStatus = function () {
+  var activatePage = function () {
     if (!isPageActive) {
       isPageActive = true;
       window.data.loadData();
@@ -15,10 +15,6 @@
       formAd.classList.remove('ad-form--disabled');
       window.form.switchDisabledAttrAll(false);
     }
-  };
-
-  var activatePage = function () {
-    checkPageStatus();
   };
 
   var deactivatePage = function () {

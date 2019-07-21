@@ -3,6 +3,24 @@
 (function () {
   var mainBlock = document.querySelector('main');
 
+  var renderMessage = function (status) {
+    var template;
+    var message;
+    if (status === 'success') {
+      template = document.querySelector('#success').content.querySelector('.success');
+      message = template.cloneNode(true);
+    }
+    if (status === 'error') {
+      template = document.querySelector('#error').content.querySelector('.error');
+      message = template.cloneNode(true);
+      var errorButton = message.querySelector('.error__button');
+      errorButton.addEventListener('click', onErrorButtonClick);
+    }
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onEscPress);
+    mainBlock.appendChild(message);
+  };
+
   var removeMessage = function () {
     var lastChild = mainBlock.lastChild;
     mainBlock.removeChild(lastChild);
@@ -22,24 +40,6 @@
 
   var onErrorButtonClick = function () {
     removeMessage();
-  };
-
-  var renderMessage = function (status) {
-    var template;
-    var message;
-    if (status === 'success') {
-      template = document.querySelector('#success').content.querySelector('.success');
-      message = template.cloneNode(true);
-    }
-    if (status === 'error') {
-      template = document.querySelector('#error').content.querySelector('.error');
-      message = template.cloneNode(true);
-      var errorButton = message.querySelector('.error__button');
-      errorButton.addEventListener('click', onErrorButtonClick);
-    }
-    document.addEventListener('click', onDocumentClick);
-    document.addEventListener('keydown', onEscPress);
-    mainBlock.appendChild(message);
   };
 
   var showSuccessMessage = function () {
