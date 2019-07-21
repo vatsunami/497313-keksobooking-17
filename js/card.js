@@ -46,36 +46,39 @@
       cardPhotos.appendChild(img);
     });
 
-    cardButtonClose.addEventListener('click', function () {
-      closeCardPopup();
-    });
+    cardButtonClose.addEventListener('click', onCardButtonCloseClick);
+    document.addEventListener('keydown', onEscPress);
 
     return card;
   };
 
   var renderCard = function (advertisement) {
-    if (cardsContainer.querySelector('.map__card')) {
-      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
-    }
     var fragment = document.createDocumentFragment();
     fragment.appendChild(createCard(advertisement));
     cardsContainer.appendChild(fragment);
   };
 
-  var closeCardPopup = function () {
+  var removeCard = function () {
     if (cardsContainer.querySelector('.map__card')) {
-      cardsContainer.removeChild(cardsContainer.querySelector('.map__card'));
+      var card = cardsContainer.querySelector('.map__card');
+      cardsContainer.removeChild(card);
+      document.removeEventListener('keydown', onEscPress);
     }
   };
 
-  document.addEventListener('keydown', function (evt) {
+  var onEscPress = function (evt) {
     if (window.util.isEscPressed(evt)) {
-      closeCardPopup();
+      removeCard();
     }
-  });
+  };
+
+  var onCardButtonCloseClick = function () {
+    removeCard();
+  };
 
   window.card = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    removeCard: removeCard
   };
 
 })();
