@@ -2,12 +2,22 @@
 
 (function () {
 
-  var filterHousingType = document.querySelector('#housing-type');
+  var filtersContainer = document.querySelector('.map__filters');
+  var filters = filtersContainer.querySelectorAll('.map__filter, .map__checkbox');
 
-  var onFilterHousingTypeChange = function () {
-    window.map.removePins();
-    window.map.updatePins();
+  var onFilterChange = function (evt) {
+    var target = evt.target;
+    filters.forEach(function (it) {
+      if (target === it) {
+        window.setTimeout(function () {
+          window.map.removePins();
+          window.card.removeCard();
+          window.map.updatePins();
+        }, 500);
+      }
+    });
   };
 
-  filterHousingType.addEventListener('change', onFilterHousingTypeChange);
+  filtersContainer.addEventListener('change', onFilterChange);
+
 })();
