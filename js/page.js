@@ -4,7 +4,6 @@
 
   var map = document.querySelector('.map');
   var formAd = document.querySelector('.ad-form');
-
   var isPageActive = false;
 
   var activatePage = function () {
@@ -21,6 +20,7 @@
     isPageActive = false;
     map.classList.add('map--faded');
     formAd.classList.add('ad-form--disabled');
+    window.pin.movePinMainToStartCoordinates();
     window.form.switchDisabledAttrAll(true);
     window.form.resetFormData();
     window.card.removeCard();

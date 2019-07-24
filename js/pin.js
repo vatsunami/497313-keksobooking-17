@@ -8,6 +8,8 @@
   var PIN_MAX_X = 1135;
   var PIN_MIN_Y = 50;
   var PIN_MAX_Y = 624;
+  var PIN_START_X = 570;
+  var PIN_START_Y = 375;
 
   var pinsContainer = document.querySelector('.map__pins');
   var pinMain = pinsContainer.querySelector('.map__pin--main');
@@ -24,6 +26,11 @@
 
   var writePinMainCoordinates = function () {
     formAdAddress.value = getPinMainCoordinates();
+  };
+
+  var movePinMainToStartCoordinates = function () {
+    pinMain.style.left = PIN_START_X + 'px';
+    pinMain.style.top = PIN_START_Y + 'px';
   };
 
   pinMain.addEventListener('mousedown', function (evt) {
@@ -76,5 +83,9 @@
     document.addEventListener('mousemove', onPinMouseMove);
     document.addEventListener('mouseup', onPinMouseUp);
   });
+
+  window.pin = {
+    movePinMainToStartCoordinates: movePinMainToStartCoordinates
+  };
 
 })();
