@@ -3,19 +3,20 @@
 (function () {
 
   var onSuccess = function (data) {
-    window.map.renderPins(data);
+    window.receivedData = data;
+    window.pins.render(data);
   };
 
   var onError = function () {
-    window.message.showErrorMessage();
+    window.message.showError();
   };
 
-  var loadData = function () {
+  var receiveData = function () {
     window.backend.load(onSuccess, onError);
   };
 
   window.data = {
-    loadData: loadData
+    receive: receiveData
   };
 
 })();
