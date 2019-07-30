@@ -11,7 +11,6 @@
 
   var startFormValues = {
     title: '',
-    address: '',
     type: 'flat',
     price: '',
     time: '12:00',
@@ -20,102 +19,91 @@
     description: ''
   };
 
-  var formMapFilter = document.querySelector('.map__filters');
-  var formMapFilterGroups = formMapFilter.querySelectorAll('select, fieldset');
-  var formAd = document.querySelector('.ad-form');
-  var formAdGroups = formAd.querySelectorAll('fieldset');
-  var formAdTitle = formAd.querySelector('#title');
-  var formAdAddress = formAd.querySelector('#address');
-  var formAdType = formAd.querySelector('#type');
-  var formAdPrice = formAd.querySelector('#price');
-  var formAdTimeIn = formAd.querySelector('#timein');
-  var formAdTimeOut = formAd.querySelector('#timeout');
-  var formAdRooms = formAd.querySelector('#room_number');
-  var formAdCapacity = formAd.querySelector('#capacity');
-  var formAdDescription = formAd.querySelector('#description');
-  // var formAdButtonSubmit = formAd.querySelector('.ad-form__submit');
-  var formAdButtonReset = formAd.querySelector('.ad-form__reset');
+  var form = document.querySelector('.ad-form');
+  var formTitle = form.querySelector('#title');
+  var formType = form.querySelector('#type');
+  var formPrice = form.querySelector('#price');
+  var formTimeIn = form.querySelector('#timein');
+  var formTimeOut = form.querySelector('#timeout');
+  var formRooms = form.querySelector('#room_number');
+  var formCapacity = form.querySelector('#capacity');
+  var formDescription = form.querySelector('#description');
+  var formButtonSubmit = form.querySelector('.ad-form__submit');
+  var formButtonReset = form.querySelector('.ad-form__reset');
+  var formFeatures = form.querySelectorAll('.feature__checkbox');
 
   var resetFormData = function () {
-    formAdTitle.value = startFormValues.title;
-    formAdAddress.value = startFormValues.address;
-    formAdType.value = startFormValues.type;
-    formAdPrice.value = startFormValues.price;
-    formAdTimeIn.value = startFormValues.time;
-    formAdTimeOut.value = startFormValues.time;
-    formAdRooms.value = startFormValues.rooms;
-    formAdCapacity.value = startFormValues.capacity;
-    formAdDescription.value = startFormValues.description;
+    formTitle.value = startFormValues.title;
+    formType.value = startFormValues.type;
+    formPrice.value = startFormValues.price;
+    formPrice.placeholder = OFFERS.flat;
+    formTimeIn.value = startFormValues.time;
+    formTimeOut.value = startFormValues.time;
+    formRooms.value = startFormValues.rooms;
+    formCapacity.value = startFormValues.capacity;
+    formDescription.value = startFormValues.description;
+    formFeatures.forEach(function (feature) {
+      feature.checked = false;
+    });
   };
 
-  var switchDisabledAttr = function (formElements, isDisabled) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].disabled = isDisabled;
-    }
-  };
-
-  var switchDisabledAttrAll = function (isDisabled) {
-    switchDisabledAttr(formAdGroups, isDisabled);
-    switchDisabledAttr(formMapFilterGroups, isDisabled);
-  };
-
-  var onFormAdTypeChange = function (evt) {
+  var onFormTypeChange = function (evt) {
     var target = evt.target;
     var price = OFFERS[target.value];
-    formAdPrice.placeholder = price;
-    formAdPrice.min = price;
+    formPrice.placeholder = price;
+    formPrice.min = price;
   };
 
-  var onFormAdTimeChange = function (evt) {
+  var onFormTimeChange = function (evt) {
     var target = evt.target;
-    if (target === formAdTimeIn) {
-      formAdTimeOut.value = target.value;
+    if (target === formTimeIn) {
+      formTimeOut.value = target.value;
     } else {
-      formAdTimeIn.value = target.value;
+      formTimeIn.value = target.value;
     }
   };
 
-  var onFormAdRoomsAndCapacityChange = function () {
-    if ((formAdRooms.value === '100' && formAdCapacity.value !== '0') ||
-    (formAdRooms.value !== '100' && formAdCapacity.value === '0') ||
-    (formAdRooms.value < formAdCapacity.value)) {
-      formAdCapacity.setCustomValidity('Недопустимое значение');
+  var onFormRoomsAndCapacityChange = function () {
+    if ((formRooms.value === '100' && formCapacity.value !== '0') ||
+    (formRooms.value !== '100' && formCapacity.value === '0') ||
+    (formRooms.value < formCapacity.value)) {
+      formCapacity.setCustomValidity('Недопустимое значение');
     } else {
-      formAdCapacity.setCustomValidity('');
+      formCapacity.setCustomValidity('');
     }
   };
 
   var onSuccess = function () {
-    window.page.deactivatePage();
-    window.message.showSuccessMessage();
+    formButtonSubmit.disabled = false;
+    window.page.deactivate();
+    window.message.showSuccess();
   };
 
   var onError = function () {
-    window.message.showErrorMessage();
+    formButtonSubmit.disabled = false;
+    window.message.showError();
   };
 
-  var onFormAdButtonSubmit = function (evtSubmit) {
+  var onFormButtonSubmit = function (evtSubmit) {
     evtSubmit.preventDefault();
-    window.backend.save(new FormData(formAd), onSuccess, onError);
+    formButtonSubmit.disabled = true;
+    window.backend.save(new FormData(form), onSuccess, onError);
   };
 
-  var onFormAdButtonResetClick = function () {
-    resetFormData();
+  var onFormButtonResetClick = function () {
+    window.page.deactivate();
   };
 
-  formAdType.addEventListener('change', onFormAdTypeChange);
-  formAdTimeIn.addEventListener('change', onFormAdTimeChange);
-  formAdTimeOut.addEventListener('change', onFormAdTimeChange);
-  formAdRooms.addEventListener('change', onFormAdRoomsAndCapacityChange);
-  formAdCapacity.addEventListener('change', onFormAdRoomsAndCapacityChange);
-  formAdButtonReset.addEventListener('click', onFormAdButtonResetClick);
-  formAd.addEventListener('submit', onFormAdButtonSubmit);
-
-  switchDisabledAttrAll(true);
+  formType.addEventListener('change', onFormTypeChange);
+  formTimeIn.addEventListener('change', onFormTimeChange);
+  formTimeOut.addEventListener('change', onFormTimeChange);
+  formRooms.addEventListener('change', onFormRoomsAndCapacityChange);
+  formCapacity.addEventListener('change', onFormRoomsAndCapacityChange);
+  formButtonReset.addEventListener('click', onFormButtonResetClick);
+  form.addEventListener('submit', onFormButtonSubmit);
 
   window.form = {
-    switchDisabledAttrAll: switchDisabledAttrAll,
-    resetFormData: resetFormData
+    reset: resetFormData
   };
 
 })();
