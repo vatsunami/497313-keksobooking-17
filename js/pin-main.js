@@ -7,7 +7,7 @@
     HEIGHT: 62,
     BOTTOM_TRIANGLE_HEIGHT: 18,
     MIN_X: 0,
-    MIN_Y: 50,
+    MIN_Y: 130,
     MAX_X: 1135,
     MAX_Y: 624,
     START_X: 570,

@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-
+  var ESC_KEYCODE = 27;
   var HIDDEN_CLASS = 'visually-hidden';
 
   var HousingType = {
@@ -73,15 +73,15 @@
   };
 
   var removeCard = function () {
-    if (cardContainer.querySelector('.map__card')) {
-      var card = cardContainer.querySelector('.map__card');
-      cardContainer.removeChild(card);
-      document.removeEventListener('keydown', onEscPress);
+    var card = cardContainer.querySelector('.map__card');
+    if (card) {
+      card.remove();
     }
+    document.removeEventListener('keydown', onEscPress);
   };
 
   var onEscPress = function (evt) {
-    if (window.keyboard.isEscPressed(evt)) {
+    if (evt.keyCode === ESC_KEYCODE) {
       removeCard();
     }
   };

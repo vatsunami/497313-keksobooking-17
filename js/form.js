@@ -32,6 +32,7 @@
   var formButtonReset = form.querySelector('.ad-form__reset');
   var formFeatures = form.querySelectorAll('.feature__checkbox');
 
+
   var resetFormData = function () {
     formTitle.value = startFormValues.title;
     formType.value = startFormValues.type;
@@ -45,6 +46,10 @@
     formFeatures.forEach(function (feature) {
       feature.checked = false;
     });
+    formTitle.style.borderColor = '';
+    formPrice.style.borderColor = '';
+    formCapacity.style.borderColor = '';
+    formRooms.style.borderColor = '';
   };
 
   var onFormTypeChange = function (evt) {
@@ -63,14 +68,22 @@
     }
   };
 
-  var onFormRoomsAndCapacityChange = function () {
+  var checkFormCapacityOrRooms = function (field) {
     if ((formRooms.value === '100' && formCapacity.value !== '0') ||
     (formRooms.value !== '100' && formCapacity.value === '0') ||
     (formRooms.value < formCapacity.value)) {
-      formCapacity.setCustomValidity('Недопустимое значение');
+      field.setCustomValidity('Недопустимое значение');
     } else {
-      formCapacity.setCustomValidity('');
+      field.setCustomValidity('');
     }
+  };
+
+  var onFormCapacityChange = function () {
+    checkFormCapacityOrRooms(formCapacity);
+  };
+
+  var onFormRoomsChange = function () {
+    checkFormCapacityOrRooms(formRooms);
   };
 
   var onSuccess = function () {
@@ -94,16 +107,54 @@
     window.page.deactivate();
   };
 
-  formType.addEventListener('change', onFormTypeChange);
-  formTimeIn.addEventListener('change', onFormTimeChange);
-  formTimeOut.addEventListener('change', onFormTimeChange);
-  formRooms.addEventListener('change', onFormRoomsAndCapacityChange);
-  formCapacity.addEventListener('change', onFormRoomsAndCapacityChange);
-  formButtonReset.addEventListener('click', onFormButtonResetClick);
-  form.addEventListener('submit', onFormButtonSubmit);
+  var highlightField = function (element) {
+    element.style.borderColor = '#f00';
+  };
+
+  var unhighlightField = function (element) {
+    element.style.borderColor = '';
+  };
+
+  var checkValidity = function (formElement) {
+    if (!formElement.validity.valid) {
+      highlightField(formElement);
+    } else {
+      unhighlightField(formElement);
+    }
+  };
+
+  var onFormButtonSubmitClick = function () {
+    checkValidity(formTitle);
+    checkValidity(formPrice);
+    checkValidity(formCapacity);
+    checkValidity(formRooms);
+  };
+
+  var addFormEventListeners = function () {
+    formType.addEventListener('change', onFormTypeChange);
+    formTimeIn.addEventListener('change', onFormTimeChange);
+    formTimeOut.addEventListener('change', onFormTimeChange);
+    formRooms.addEventListener('change', onFormRoomsChange);
+    formCapacity.addEventListener('change', onFormCapacityChange);
+    formButtonReset.addEventListener('click', onFormButtonResetClick);
+    form.addEventListener('submit', onFormButtonSubmit);
+    formButtonSubmit.addEventListener('click', onFormButtonSubmitClick);
+  };
+
+  var removeFormEventListeners = function () {
+    formType.removeEventListener('change', onFormTypeChange);
+    formTimeIn.removeEventListener('change', onFormTimeChange);
+    formTimeOut.removeEventListener('change', onFormTimeChange);
+    formRooms.removeEventListener('change', onFormRoomsChange);
+    formCapacity.removeEventListener('change', onFormCapacityChange);
+    formButtonReset.removeEventListener('click', onFormButtonResetClick);
+    form.removeEventListener('submit', onFormButtonSubmit);
+  };
 
   window.form = {
-    reset: resetFormData
+    reset: resetFormData,
+    addEventListeners: addFormEventListeners,
+    removeEventListeners: removeFormEventListeners
   };
 
 })();

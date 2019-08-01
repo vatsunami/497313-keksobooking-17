@@ -5,6 +5,7 @@
   var onSuccess = function (data) {
     window.receivedData = data;
     window.pins.render(data);
+    window.page.removeDisabledAttrAllMapFilters();
   };
 
   var onError = function () {

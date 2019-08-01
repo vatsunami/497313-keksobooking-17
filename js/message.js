@@ -1,19 +1,22 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
   var mainBlock = document.querySelector('main');
+  var templateSuccess = document.querySelector('#success').content.querySelector('.success');
+  var templateError = document.querySelector('#error').content.querySelector('.error');
+  var errorButton = templateError.querySelector('.error__button');
 
   var renderMessage = function (status) {
     var template;
     var message;
     if (status === 'success') {
-      template = document.querySelector('#success').content.querySelector('.success');
+      template = templateSuccess;
       message = template.cloneNode(true);
     }
     if (status === 'error') {
-      template = document.querySelector('#error').content.querySelector('.error');
+      template = templateError;
       message = template.cloneNode(true);
-      var errorButton = message.querySelector('.error__button');
       errorButton.addEventListener('click', onErrorButtonClick);
     }
     document.addEventListener('click', onDocumentClick);
@@ -35,7 +38,7 @@
   };
 
   var onEscPress = function (evt) {
-    if (window.keyboard.isEscPressed(evt)) {
+    if (evt.keyCode === ESC_KEYCODE) {
       removeMessage();
     }
   };

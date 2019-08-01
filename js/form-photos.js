@@ -31,16 +31,34 @@
 
   var resetPhotosAndAvatar = function () {
     var photos = photosContainer.querySelectorAll('.ad-form__photo');
-    photos.forEach(function (photo) {
-      if (photo.querySelector('img')) {
-        photo.remove();
-      }
+    var photosArray = [].slice.call(photos);
+    photosArray.filter(function (photo) {
+      return photo.firstChild;
+    }).forEach(function (photo) {
+      photo.remove();
     });
     avatarPreview.src = AVATAR_DEFAULT_SOURCE;
+    avatarFileChooser.value = '';
+    photoFileChooser.value = '';
   };
 
   var changeAvatar = function (data) {
     avatarPreview.src = data;
+  };
+
+  var onAvatarFileChooserChange = function () {
+    getFiles(avatarFileChooser, changeAvatar);
+  };
+
+  var onPhotoFileChooserChange = function () {
+    getFiles(photoFileChooser, renderPhoto);
+  };
+
+  var getFiles = function (fileChooser, callback) {
+    if (fileChooser.files.length > 0) {
+      var files = [].slice.call(fileChooser.files);
+      uploadFiles(files, callback);
+    }
   };
 
   var uploadFiles = function (files, callback) {
@@ -59,24 +77,20 @@
     });
   };
 
-  var addChangeEventListener = function (fileChooser, callback) {
-    fileChooser.addEventListener('change', function () {
-      if (fileChooser.files.length > 0) {
-        var files = [].slice.call(fileChooser.files);
-        uploadFiles(files, callback);
-      }
-    });
+  var addEventListeners = function () {
+    avatarFileChooser.addEventListener('change', onAvatarFileChooserChange);
+    photoFileChooser.addEventListener('change', onPhotoFileChooserChange);
   };
 
-  var addEventsListeners = function (fileChooser, callback) {
-    addChangeEventListener(fileChooser, callback);
+  var removeEventListeners = function () {
+    avatarFileChooser.removeEventListener('change', onAvatarFileChooserChange);
+    photoFileChooser.removeEventListener('change', onPhotoFileChooserChange);
   };
-
-  addEventsListeners(avatarFileChooser, changeAvatar);
-  addEventsListeners(photoFileChooser, renderPhoto);
 
   window.formPhotos = {
-    reset: resetPhotosAndAvatar
+    reset: resetPhotosAndAvatar,
+    addEventListeners: addEventListeners,
+    removeEventListeners: removeEventListeners
   };
 
 })();
