@@ -149,6 +149,7 @@
     formCapacity.removeEventListener('change', onFormCapacityChange);
     formButtonReset.removeEventListener('click', onFormButtonResetClick);
     form.removeEventListener('submit', onFormButtonSubmit);
+    formButtonSubmit.removeEventListener('click', onFormButtonSubmitClick);
   };
 
   window.form = {
