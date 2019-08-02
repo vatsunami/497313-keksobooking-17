@@ -16,7 +16,6 @@
 
   var pinsContainer = document.querySelector('.map__pins');
   var pinMain = pinsContainer.querySelector('.map__pin--main');
-  var map = document.querySelector('.map');
   var formAdAddress = document.querySelector('#address');
 
   var getPinMainCoordinates = function () {
@@ -69,21 +68,27 @@
         y: moveEvt.clientY
       };
 
-      pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
-      pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
+      var pinMainX = pinMain.offsetLeft - shift.x;
+      var pinMainY = pinMain.offsetTop - shift.y;
 
-      if (moveEvt.pageX < map.offsetLeft + PinMain.WIDTH) {
-        pinMain.style.left = PinMain.MIN_X + 'px';
+      if (pinMainY < PinMain.MIN_Y) {
+        pinMainY = PinMain.MIN_Y;
       }
-      if (moveEvt.pageX > map.offsetLeft + PinMain.MAX_X) {
-        pinMain.style.left = PinMain.MAX_X + 'px';
+
+      if (pinMainY > PinMain.MAX_Y) {
+        pinMainY = PinMain.MAX_Y;
       }
-      if (moveEvt.pageY < PinMain.MIN_Y + PinMain.HEIGHT + PinMain.BOTTOM_TRIANGLE_HEIGHT) {
-        pinMain.style.top = PinMain.MIN_Y + 'px';
+
+      if (pinMainX < PinMain.MIN_X) {
+        pinMainX = PinMain.MIN_X;
       }
-      if (moveEvt.pageY > PinMain.MAX_Y) {
-        pinMain.style.top = PinMain.MAX_Y + 'px';
+
+      if (pinMainX > PinMain.MAX_X) {
+        pinMainX = PinMain.MAX_X;
       }
+
+      pinMain.style.top = pinMainY + 'px';
+      pinMain.style.left = pinMainX + 'px';
     };
 
     var onPinMouseUp = function (upEvt) {
