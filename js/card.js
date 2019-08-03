@@ -76,6 +76,7 @@
     var card = cardContainer.querySelector('.map__card');
     if (card) {
       card.remove();
+      window.pins.removeActiveClass();
     }
     document.removeEventListener('keydown', onEscPress);
   };

@@ -61,7 +61,8 @@
 
   window.pins = {
     render: renderPins,
-    remove: removePins
+    remove: removePins,
+    removeActiveClass: removePinActiveClass
   };
 
 })();
