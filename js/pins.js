@@ -21,10 +21,9 @@
     pin.querySelector('img').src = advertisement.author.avatar;
     pin.querySelector('img').alt = 'Метка объявления';
     pin.addEventListener('click', function () {
-      removePinActiveClass();
-      addPinActiveClass(pin);
       window.card.remove();
       window.card.render(advertisement);
+      addPinActiveClass(pin);
     });
     return pin;
   };
