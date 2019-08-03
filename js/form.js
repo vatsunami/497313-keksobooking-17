@@ -68,22 +68,22 @@
     }
   };
 
-  var checkFormCapacityOrRooms = function (field) {
+  var checkFormCapacity = function () {
     if ((formRooms.value === '100' && formCapacity.value !== '0') ||
     (formRooms.value !== '100' && formCapacity.value === '0') ||
     (formRooms.value < formCapacity.value)) {
-      field.setCustomValidity('Недопустимое значение');
+      formCapacity.setCustomValidity('Недопустимое значение');
     } else {
-      field.setCustomValidity('');
+      formCapacity.setCustomValidity('');
     }
   };
 
   var onFormCapacityChange = function () {
-    checkFormCapacityOrRooms(formCapacity);
+    checkFormCapacity();
   };
 
   var onFormRoomsChange = function () {
-    checkFormCapacityOrRooms(formRooms);
+    checkFormCapacity();
   };
 
   var onSuccess = function () {
@@ -126,8 +126,8 @@
   var onFormButtonSubmitClick = function () {
     checkValidity(formTitle);
     checkValidity(formPrice);
-    checkValidity(formCapacity);
     checkValidity(formRooms);
+    checkValidity(formCapacity);
   };
 
   var addFormEventListeners = function () {
