@@ -49,7 +49,6 @@
     formTitle.style.borderColor = '';
     formPrice.style.borderColor = '';
     formCapacity.style.borderColor = '';
-    formRooms.style.borderColor = '';
   };
 
   var onFormTypeChange = function (evt) {
@@ -124,9 +123,9 @@
   };
 
   var onFormButtonSubmitClick = function () {
+    checkFormCapacity();
     checkValidity(formTitle);
     checkValidity(formPrice);
-    checkValidity(formRooms);
     checkValidity(formCapacity);
   };
 
