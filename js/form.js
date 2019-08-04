@@ -38,6 +38,7 @@
     formType.value = startFormValues.type;
     formPrice.value = startFormValues.price;
     formPrice.placeholder = OFFERS.flat;
+    formPrice.min = formPrice.placeholder;
     formTimeIn.value = startFormValues.time;
     formTimeOut.value = startFormValues.time;
     formRooms.value = startFormValues.rooms;

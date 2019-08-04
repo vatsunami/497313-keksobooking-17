@@ -13,26 +13,28 @@
   var filters = filtersContainer.querySelectorAll('.map__filter, .map__checkbox');
   var filtersArray = [].slice.call(filters);
   var filterSelects = filtersContainer.querySelectorAll('select');
-  var filterSelectsArray = [].slice.call(filterSelects);
   var filterHousingType = filtersContainer.querySelector('#housing-type');
   var filterHousingPrice = filtersContainer.querySelector('#housing-price');
   var filterHousingRooms = filtersContainer.querySelector('#housing-rooms');
   var filterHousingGuests = filtersContainer.querySelector('#housing-guests');
   var filterFeatures = filtersContainer.querySelectorAll('.map__checkbox');
+  var filterWifi = filtersContainer.querySelector('#filter-wifi');
+  var filterDishwasher = filtersContainer.querySelector('#filter-dishwasher');
+  var filterParking = filtersContainer.querySelector('#filter-parking');
+  var filterWasher = filtersContainer.querySelector('#filter-washer');
+  var filterElevator = filtersContainer.querySelector('#filter-elevator');
+  var filterConditioner = filtersContainer.querySelector('#filter-conditioner');
 
-  var filterPins = function () {
-    var pins = window.receivedData.slice();
-    var checkedFeatures = filtersContainer.querySelectorAll('.map__checkbox:checked');
-
-    var filterChangedSelects = filterSelectsArray.filter(function (it) {
-      return it.value !== FILTER_DEFAULT_VALUE;
-    });
-
-    var filterPinsByType = function (it) {
+  var filterPinsByType = function (it) {
+    if (filterHousingType.value !== FILTER_DEFAULT_VALUE) {
       return filterHousingType.value === it.offer.type;
-    };
+    } else {
+      return it;
+    }
+  };
 
-    var filterPinsByPrice = function (it) {
+  var filterPinsByPrice = function (it) {
+    if (filterHousingPrice.value !== FILTER_DEFAULT_VALUE) {
       var price;
       if (it.offer.price < Price.MIN) {
         price = 'low';
@@ -42,53 +44,50 @@
         price = 'high';
       }
       return filterHousingPrice.value === price;
-    };
+    } else {
+      return it;
+    }
+  };
 
-    var filterPinsByRooms = function (it) {
+  var filterPinsByRooms = function (it) {
+    if (filterHousingRooms.value !== FILTER_DEFAULT_VALUE) {
       return +filterHousingRooms.value === it.offer.rooms;
-    };
+    } else {
+      return it;
+    }
+  };
 
-    var filterPinsByGuests = function (it) {
+  var filterPinsByGuests = function (it) {
+    if (filterHousingGuests.value !== FILTER_DEFAULT_VALUE) {
       return +filterHousingGuests.value === it.offer.guests;
-    };
-
-    var filterPinsByParameters = function () {
-      filterChangedSelects.forEach(function (select) {
-        if (select === filterHousingType) {
-          pins = pins.filter(filterPinsByType);
-        }
-        if (select === filterHousingPrice) {
-          pins = pins.filter(filterPinsByPrice);
-        }
-        if (select === filterHousingRooms) {
-          pins = pins.filter(filterPinsByRooms);
-        }
-        if (select === filterHousingGuests) {
-          pins = pins.filter(filterPinsByGuests);
-        }
-      });
-    };
-
-    var filterPinsByFeatures = function () {
-      var checkedFeaturesArray = [].slice.call(checkedFeatures);
-      var checkedFeaturesValues = checkedFeaturesArray.map(function (it) {
-        return it.value;
-      });
-      pins = pins.filter(function (pin) {
-        var isValuesContainsInOffer = checkedFeaturesValues.every(function (value) {
-          return pin.offer.features.indexOf(value) !== -1;
-        });
-        return isValuesContainsInOffer;
-      });
-    };
-
-    if (filterChangedSelects.length !== 0) {
-      filterPinsByParameters();
+    } else {
+      return it;
     }
-    if (checkedFeatures.length !== 0) {
-      filterPinsByFeatures();
+  };
+
+  var filterPinsByFeature = function (it, feature) {
+    if (feature.checked) {
+      return it.offer.features.indexOf(feature.value) !== -1;
+    } else {
+      return it;
     }
-    return pins;
+  };
+
+  var filterPins = function () {
+    var pins = window.receivedData.slice();
+    var filteredPins = pins.filter(function (it) {
+      return filterPinsByType(it) &&
+      filterPinsByPrice(it) &&
+      filterPinsByRooms(it) &&
+      filterPinsByGuests(it) &&
+      filterPinsByFeature(it, filterWifi) &&
+      filterPinsByFeature(it, filterDishwasher) &&
+      filterPinsByFeature(it, filterParking) &&
+      filterPinsByFeature(it, filterWasher) &&
+      filterPinsByFeature(it, filterElevator) &&
+      filterPinsByFeature(it, filterConditioner);
+    });
+    return filteredPins;
   };
 
   var updatePins = function () {
